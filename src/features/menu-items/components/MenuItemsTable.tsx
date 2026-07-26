@@ -84,7 +84,9 @@ const MenuItemTable = () => {
             <TableHead>Descripción</TableHead>
             <TableHead>Precio</TableHead>
             <TableHead>Estado</TableHead>
-            <TableHead>Acción</TableHead>
+            <TableHead className="text-right">
+              Acción
+            </TableHead>
           </TableRow>
         </TableHeader>
 
@@ -111,7 +113,7 @@ const MenuItemTable = () => {
                   {parseAvailable(menuItem.isAvailable)}
                 </Badge>
               </TableCell>
-              <TableCell>
+              <TableCell className="text-right">
                 <MenuItemCreateDialog menuItem={menuItem} />
               </TableCell>
             </TableRow>

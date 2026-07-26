@@ -6,18 +6,34 @@ import { Check, Plus, Search } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getMenuItemsResponse } from '@/features/menu-items/api/menu-items.api';
 
 interface MenuItemSelectorProps {
-  menuItems: MenuItem[];
   selectedItems: MenuItemFormData[];
   onSelectionChange: (items: MenuItemFormData[]) => void;
 }
 
 const MenuItemSelector = ({
-  menuItems,
   selectedItems,
   onSelectionChange,
 }: MenuItemSelectorProps) => {
+
+  const [page] = useState<number>(1);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
+  const {
+    data,
+    // isLoading,
+    // isError,
+    // error
+  } = useQuery({
+    queryKey: ['menu-items', page, searchTerm],
+    queryFn: () => getMenuItemsResponse(page, searchTerm),
+  });
+
+  const menuItems = data?.data.data ?? [];
 
   const handleToggle = (menuItem: MenuItem) => {
     const isSelected = selectedItems.find((item) => item.id === menuItem.id);
@@ -50,6 +66,8 @@ const MenuItemSelector = ({
           type='search'
           placeholder='buscar menu por nombre...'
           className='pl-9 text-sm'
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 

@@ -10,13 +10,15 @@ const PedidosResumen = ({
     setFormData,
     totales,
     onDeleteItem,
-    onsubmit
+    onsubmit,
+    isSubmitting
 }: {
     formData: PedidoFormData;
     setFormData: (data: PedidoFormData) => void;
     totales: { total: number; subTotal: number }
     onDeleteItem: (id: number) => void;
     onsubmit: () => void;
+    isSubmitting: boolean;
 }) => {
 
     const handleUpdateQuantity = (item: MenuItemFormData, quantity: number) => {
@@ -134,6 +136,7 @@ const PedidosResumen = ({
                                 variant="outline"
                                 className="w-1/3"
                                 data-slot="dialog-close"
+                                disabled={isSubmitting}
                             >
                                 Cancelar
                             </Button>
