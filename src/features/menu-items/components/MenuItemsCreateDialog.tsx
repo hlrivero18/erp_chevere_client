@@ -10,28 +10,42 @@ import {
 import { Button } from '@/components/ui/button';
 
 import MenuItemForm from './MenuItemsForm';
+import type { MenuItem } from '../types/menu-items.types';
 
-const MenuItemCreateDialog = () => {
+type MenuItemCreateDialogProps = {
+  menuItem?: MenuItem | null;
+};
+
+const MenuItemCreateDialog = ({
+  menuItem = null,
+}: MenuItemCreateDialogProps) => {
   return (
     <Dialog>
 
-      <DialogTrigger render={<Button />}>
-        Nuevo item
+      <DialogTrigger 
+        render={
+          <Button 
+            size={menuItem ? 'xs' : 'default'}
+            variant={menuItem ? 'outline' : 'default'}
+          />
+        }
+      >
+        { menuItem ? 'Editar' : 'Nuevo item'}
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[500px]">
 
         <DialogHeader>
           <DialogTitle>
-            Crear item
-            </DialogTitle>
+            {menuItem ? 'Editar item' : 'Crear item'}
+          </DialogTitle>
 
           <DialogDescription>
-            Completa los datos para registrar un nuevo item.
+            {menuItem ? 'Completa los datos para editar un item.' : 'Completa los datos para registrar un nuevo item.'}
           </DialogDescription>
         </DialogHeader>
 
-        <MenuItemForm />
+        <MenuItemForm menuItem={menuItem} />
 
       </DialogContent>
 

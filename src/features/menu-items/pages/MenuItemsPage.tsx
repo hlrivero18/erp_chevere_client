@@ -8,7 +8,7 @@ import { getMenuItemsResponse } from '../api/menu-items.api';
 const MenuItemsPage = () => {
 
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-
+  
   const loadMenuItems = async () => {
     try {
 

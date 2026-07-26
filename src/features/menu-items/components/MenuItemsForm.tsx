@@ -2,24 +2,24 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
-import type { MenuItemCreateRequest } from '../types/menu-items.types';
-import { createMenuItemResponse } from '../api/menu-items.api';
+import type { MenuItem, MenuItemCreateRequest } from '../types/menu-items.types';
+import { createMenuItemResponse, updateMenuItemResponse } from '../api/menu-items.api';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-const MenuItemForm = () => {
+const MenuItemForm = ({ menuItem = null }: { menuItem?: MenuItem }) => {
   const [formData, setFormData] = useState<MenuItemCreateRequest>({
-    name: '',
-    description: '',
-    price: 0.00,
-    isAvailable: true,
+    name: menuItem?.name ?? '',
+    description: menuItem?.description ?? '',
+    price: menuItem?.price ?? 0.00,
+    isAvailable: menuItem?.isAvailable ?? true,
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try{
-      const response = await createMenuItemResponse(formData);
-      if(response.success){
-        // toast.success('Item creado exitosamente');
+    try {
+      const response = menuItem ? await updateMenuItemResponse(menuItem.id, formData) : await createMenuItemResponse(formData);
+      if (response.success) {
         setFormData({
           name: '',
           description: '',
@@ -27,7 +27,7 @@ const MenuItemForm = () => {
           isAvailable: true,
         });
       }
-    }catch(error){
+    } catch (error) {
       console.log(error)
     }
   };
@@ -39,7 +39,7 @@ const MenuItemForm = () => {
       [id]: value,
     }));
   };
-  
+
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
 
@@ -87,23 +87,35 @@ const MenuItemForm = () => {
           />
         </div>
 
-        {/* <div className="space-y-2">
-          <Label htmlFor="stock">
-            Stock
+        <div className="space-y-2">
+          <Label htmlFor="isAvailable">
+            Estado
           </Label>
 
-          <Input
-            id="stock"
-            type="number"
-            min="0"
-            placeholder="0"
-          />
-        </div> */}
+          <Select
+            id="isAvailable"
+            value={formData.isAvailable == true ? "Activo" : "Inactivo"}
+            onValueChange={(value) => {
+              setFormData((prev) => ({
+                ...prev,
+                isAvailable: value === "Activo" ? true : false,
+              }));
+            }}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Seleccionar" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Activo">Activo</SelectItem>
+              <SelectItem value="Inactivo">Inactivo</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
       </div>
 
       <Button type="submit" className="w-full">
-        Crear producto
+        {menuItem ? 'Editar item' : 'Crear item'}
       </Button>
 
     </form>
