@@ -2,11 +2,12 @@ import api from "@/lib/axios";
 import type { ApiResponse } from "@/types/api.types";
 import type { MenuItem, MenuItemCreateRequest, MenuItemsResponse } from "../types/menu-items.types";
 
-export const getMenuItemsResponse = async (page: number = 1, limit: number = 10): Promise<MenuItemsResponse> => {
+export const getMenuItemsResponse = async (page: number = 1, search?: string): Promise<MenuItemsResponse> => {
     const response = await api.get<MenuItemsResponse>('/menu-items', {
         params: {
             page,
-            limit
+            limit: 8,
+            search
         }
     });
     return response.data;

@@ -1,30 +1,11 @@
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 import MenuItemCreateDialog from '../components/MenuItemsCreateDialog';
 import MenuItemTable from '../components/MenuItemsTable';
 
-import type { MenuItem } from '../types/menu-items.types';
-import { getMenuItemsResponse } from '../api/menu-items.api';
+// import type { MenuItem } from '../types/menu-items.types';
+// import { getMenuItemsResponse } from '../api/menu-items.api';
 
 const MenuItemsPage = () => {
-
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  
-  const loadMenuItems = async () => {
-    try {
-
-      const response = await getMenuItemsResponse();
-      if(response.success) {
-        setMenuItems(response.data.data);
-      }
-      
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  
-  useEffect(() => {
-    loadMenuItems();
-  }, []);
 
   return (
     <div className="space-y-6">
@@ -45,7 +26,7 @@ const MenuItemsPage = () => {
 
       </div>
 
-      <MenuItemTable menuItems={menuItems} />
+      <MenuItemTable />
 
     </div>
   );
