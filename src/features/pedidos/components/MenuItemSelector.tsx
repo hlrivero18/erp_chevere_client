@@ -1,12 +1,16 @@
 import type { MenuItem } from '@/features/menu-items/types/menu-items.types';
+import type { MenuItemFormData } from '../types/pedidos.types';
 
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Check, Plus, Search } from 'lucide-react';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 interface MenuItemSelectorProps {
   menuItems: MenuItem[];
-  selectedItems: number[];
-  onSelectionChange: (items: number[]) => void;
+  selectedItems: MenuItemFormData[];
+  onSelectionChange: (items: MenuItemFormData[]) => void;
 }
 
 const MenuItemSelector = ({
@@ -15,59 +19,88 @@ const MenuItemSelector = ({
   onSelectionChange,
 }: MenuItemSelectorProps) => {
 
-  const handleToggle = (menuItemId: number) => {
-    const isSelected = selectedItems.includes(menuItemId);
+  const handleToggle = (menuItem: MenuItem) => {
+    const isSelected = selectedItems.find((item) => item.id === menuItem.id);
 
     if (isSelected) {
-      onSelectionChange(
-        selectedItems.filter(
-          (id) => id !== menuItemId
-        )
-      );
-
+      onSelectionChange([
+        ...selectedItems.map((item) => item.id === menuItem.id ? { ...item, cantidad: item.cantidad + 1 } : item)
+      ])
       return;
     }
 
     onSelectionChange([
       ...selectedItems,
-      menuItemId,
+      {
+        id: menuItem.id,
+        name: menuItem.name,
+        price: menuItem.price,
+        cantidad: 1,
+        total: menuItem.price,
+        subTotal: menuItem.price,
+      }
     ]);
   };
 
   return (
     <div className="space-y-3">
-
-      <Label>
-        Seleccionar productos
-      </Label>
-
-      <div className="space-y-3">
-
-        {menuItems.map((menuItem) => (
-          <div
-            key={menuItem.id}
-            className="flex items-center gap-3"
-          >
-
-            <Checkbox
-              id={`menu-item-${menuItem.id}`}
-              checked={selectedItems.includes(menuItem.id)}
-              onCheckedChange={() =>
-                handleToggle(menuItem.id)
-              }
-            />
-
-            <Label
-              htmlFor={`menu-item-${menuItem.id}`}
-              className="cursor-pointer"
-            >
-              {menuItem.name}
-            </Label>
-
-          </div>
-        ))}
-
+      <div className='relative'>
+        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" />
+        <Input
+          type='search'
+          placeholder='buscar menu por nombre...'
+          className='pl-9 text-sm'
+        />
       </div>
+
+      <ScrollArea className="flex-1 mt-2 h-[400px]">
+        <div className="space-y-1.5 pr-2">
+          {menuItems.map((menuItem) => {
+
+            const isSelected = selectedItems.filter((item) => item.id === menuItem.id)[0];
+
+            return (
+              <div
+                key={menuItem.id}
+                className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-100 dark:border-zinc-800/60 hover:border-zinc-300 dark:hover:border-zinc-700 hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-all group"
+              >
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium">{menuItem.name}</span>
+                    {menuItem && (
+                      <Badge className="text-[10px] px-1.5 py-0 font-normal">
+                        Categoria
+                      </Badge>
+                    )}
+                  </div>
+                  <p className="text-xs text-zinc-500 font-mono">
+                    ${menuItem.price}
+                  </p>
+                </div>
+                <Button
+                  size='sm'
+                  variant={selectedItems ? "secondary" : "outline"}
+                  onClick={() => handleToggle(menuItem)}
+                >
+                  {isSelected ? (
+                    <>
+                      <Check className="h-3.5 w-3.5 text-emerald-600" />
+                      <span>Añadido ({isSelected.cantidad})</span>
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="h-3.5 w-3.5" />
+                      <span>Añadir</span>
+                    </>
+                  )}
+                </Button>
+              </div>
+            )
+          })}
+
+        </div>
+      </ScrollArea>
+
 
     </div>
   );
