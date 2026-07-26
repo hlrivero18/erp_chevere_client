@@ -5,6 +5,8 @@ import { useState } from 'react';
 import type { MenuItem, MenuItemCreateRequest } from '../types/menu-items.types';
 import { createMenuItemResponse, updateMenuItemResponse } from '../api/menu-items.api';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 const MenuItemForm = ({ menuItem = null }: { menuItem?: MenuItem }) => {
   const [formData, setFormData] = useState<MenuItemCreateRequest>({
@@ -14,23 +16,51 @@ const MenuItemForm = ({ menuItem = null }: { menuItem?: MenuItem }) => {
     isAvailable: menuItem?.isAvailable ?? true,
   });
 
+  const queryClient = useQueryClient();
+
+  const mutationCreate = useMutation({
+    mutationFn: createMenuItemResponse,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['menu-items']
+      });
+      setFormData({
+        name: '',
+        description: '',
+        price: 0,
+        isAvailable: true,
+      });
+    },
+  })
+
+  const mutationUpdate = useMutation({
+    mutationFn: ({ id, data }: {
+      id: number;
+      data: MenuItemCreateRequest;
+    }) => updateMenuItemResponse(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['menu-items'],
+      });
+    },
+  });
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      const response = menuItem ? await updateMenuItemResponse(menuItem.id, formData) : await createMenuItemResponse(formData);
-      if (response.success) {
-        setFormData({
-          name: '',
-          description: '',
-          price: 0.00,
-          isAvailable: true,
-        });
-      }
-    } catch (error) {
-      console.log(error)
+    if (menuItem) {
+      mutationUpdate.mutate({
+        id: menuItem.id,
+        data: formData
+      });
+
+      return;
     }
+
+    mutationCreate.mutate(formData);
   };
+
+  const isSubmitting = mutationCreate.isPending || mutationUpdate.isPending;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -114,8 +144,18 @@ const MenuItemForm = ({ menuItem = null }: { menuItem?: MenuItem }) => {
 
       </div>
 
-      <Button type="submit" className="w-full">
-        {menuItem ? 'Editar item' : 'Crear item'}
+      <Button
+        type="submit"
+        className="w-full"
+        disabled={isSubmitting}
+      >
+        {isSubmitting
+          ? menuItem
+            ? 'Actualizando...'
+            : 'Creando...'
+          : menuItem
+            ? 'Actualizar item'
+            : 'Crear item'}
       </Button>
 
     </form>

@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import type { MenuItem } from '../types/menu-items.types';
 
 import {
   Table,
@@ -13,37 +12,15 @@ import {
 import parseAvailable from '../services/parseAvailable';
 import { Badge } from '@/components/ui/badge';
 import MenuItemCreateDialog from './MenuItemsCreateDialog';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { getMenuItemsResponse } from '../api/menu-items.api';
-import { Input } from '@base-ui/react';
+import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
-
-
-// interface MenuItemTableProps {
-//   menuItems: MenuItem[];
-// }
+import { useQuery } from '@tanstack/react-query';
 
 const MenuItemTable = () => {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const [totalItems, setTotalItems] = useState<number>(0);
   const [searchTerm, setSearchTerm] = useState<string>('');
-
-  const loadMenuItems = async () => {
-    try {
-
-      const response = await getMenuItemsResponse(page, searchTerm);
-      if (response.success) {
-        setMenuItems(response.data.data);
-        setTotalPages(response.data.meta.totalPages);
-        setTotalItems(response.data.meta.total);
-      }
-
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   const handlePageChange = (newPage: number) => {
     const nextPage = page + newPage;
@@ -52,9 +29,28 @@ const MenuItemTable = () => {
     }
   };
 
-  useEffect(() => {
-    loadMenuItems();
-  }, [page,searchTerm]);
+  const {
+    data,
+    // isLoading,
+    // isError,
+    // error
+  } = useQuery({
+    queryKey: ['menu-items', page, searchTerm],
+    queryFn: () => getMenuItemsResponse(page, searchTerm),
+  });
+
+  const menuItems = data?.data.data ?? [];
+  const totalPages = data?.data.meta.totalPages ?? 0;
+  const totalItems = data?.data.meta.total ?? 0;
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (isError) {
+  //   return <div>Error: {error?.message}</div>;
+  // }
+
   return (
     <div className="bg-white p-4 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-3xl shadow-sm overflow-hidden flex flex-col">
 
@@ -64,7 +60,7 @@ const MenuItemTable = () => {
           <Input
             type='search'
             placeholder='Buscar menu por nombre...'
-            className='pl-9 text-sm w-full p-2 rounded-md border-2 border-zinc-200 dark:border-zinc-800'
+            className='pl-9 text-sm w-full rounded-md border-2 border-zinc-200 dark:border-zinc-800'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -96,7 +92,7 @@ const MenuItemTable = () => {
           {menuItems.map((menuItem, index) => (
             <TableRow key={menuItem.id}>
               <TableCell className="font-medium">
-                {index + 1}
+                {(page - 1) * 8 + index + 1}
               </TableCell>
               <TableCell className="font-medium">
                 {menuItem.name}
