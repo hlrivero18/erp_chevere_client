@@ -9,8 +9,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { removeToken } from '@/features/auth/services/auth.service';
 import { Home, Package, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router';
+import { useNavigate } from 'react-router';
 
 const AppSidebar = () => {
     const routes = [
@@ -18,6 +20,7 @@ const AppSidebar = () => {
         {name: "Menu", path: "/menu-items", icon: <Package />},
         {name: "Pedidos", path: "/pedidos", icon: <ShoppingCart />},
     ]
+    const navigate = useNavigate();
     return (
         <Sidebar>
 
@@ -56,7 +59,7 @@ const AppSidebar = () => {
             <SidebarMenu>
 
             <SidebarMenuItem>
-                <SidebarMenuButton>
+                <SidebarMenuButton onClick={() => {removeToken(); navigate("/login");}}>
                 Cerrar sesión
                 </SidebarMenuButton>
             </SidebarMenuItem>

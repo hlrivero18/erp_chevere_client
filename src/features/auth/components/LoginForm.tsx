@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { loginRequest } from '../api/auth.api';
 import { useNavigate } from 'react-router';
 import { saveToken } from '../services/auth.service';
+import { toast } from 'sonner';
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -36,9 +37,10 @@ const LoginForm = () => {
             if (res.success) {
                 saveToken(res);
                 navigate('/');
+                toast.success('Inicio de sesión exitoso');
             }
         } catch (error) {
-            console.log(error);
+            toast.error('Credenciales incorrectas');
         }
     };
     return (
