@@ -71,7 +71,7 @@ const MenuItemSelector = ({
         />
       </div>
 
-      <ScrollArea className="flex-1 mt-2 h-[400px]">
+      <ScrollArea className="flex-1 mt-2 h-[200px]">
         <div className="space-y-1.5 pr-2">
           {menuItems.map((menuItem) => {
 

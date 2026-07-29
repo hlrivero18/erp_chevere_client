@@ -21,6 +21,12 @@ const badgeVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         success: "bg-green-200 text-green-800",
         error: "bg-red-200 text-red-800",
+        Pendiente:
+          "bg-yellow-500/10 text-yellow-800 focus-visible:ring-yellow-500/20 dark:bg-yellow-500/20 dark:focus-visible:ring-yellow-500/40 [a]:hover:bg-yellow-500/20",
+        Cobrado:
+          "bg-green-500/10 text-green-800 focus-visible:ring-green-500/20 dark:bg-green-500/20 dark:focus-visible:ring-green-500/40 [a]:hover:bg-green-500/20",
+        Cancelado:
+          "bg-red-500/10 text-red-800 focus-visible:ring-red-500/20 dark:bg-red-500/20 dark:focus-visible:ring-red-500/40 [a]:hover:bg-red-500/20",
       },
     },
     defaultVariants: {

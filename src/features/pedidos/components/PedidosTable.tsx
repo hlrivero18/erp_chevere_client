@@ -14,6 +14,7 @@ import { getPedidosResponse } from '../api/pedidos.api';
 import { useQuery } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
+import PedidosDetailDialog from './PedidosDetailDialog';
 
 // interface PedidosTableProps {
 //   pedidos: Pedido[];
@@ -74,9 +75,9 @@ const PedidosTable = () => {
           <TableRow>
             <TableHead>ID</TableHead>
             <TableHead>Descripción</TableHead>
-            <TableHead>Subtotal</TableHead>
             <TableHead>Total</TableHead>
             <TableHead>Estado</TableHead>
+            <TableHead>Metodo de pago</TableHead>
             <TableHead>Creado por</TableHead>
             <TableHead>Fecha</TableHead>
             <TableHead className="text-right">
@@ -98,15 +99,15 @@ const PedidosTable = () => {
               </TableCell>
 
               <TableCell>
-                {Number(pedido.subTotal).toFixed(2)}
-              </TableCell>
-
-              <TableCell>
                 {Number(pedido.total).toFixed(2)}
               </TableCell>
 
               <TableCell>
                 {pedido.estado}
+              </TableCell>
+
+              <TableCell>
+                {pedido.metodoPago}
               </TableCell>
 
               <TableCell>
@@ -119,9 +120,7 @@ const PedidosTable = () => {
               </TableCell>
 
               <TableCell className="text-right">
-                <Button variant="outline" size="xs">
-                  Ver detalle
-                </Button>
+                <PedidosDetailDialog pedido={pedido} />
               </TableCell>
 
             </TableRow>

@@ -12,14 +12,25 @@ export interface Pedido {
   subTotal: string;
   descripcion: string;
   estado: string;
+  metodoPago: string;
   createdBy: PedidoUser;
   createdAt: string;
   updatedAt: string;
   updatedBy: PedidoUser | null;
+  items: PedidoItem[];
+}
+
+export interface PedidoItem {
+  id: number;
+  name: string;
+  precio: number;
+  cantidad: number;
 }
 
 export interface PedidoFormData {
   description: string;
+  metodoPago: string;
+  estado: string;
   menuItems: MenuItemFormData[];
 }
 
@@ -44,6 +55,8 @@ export interface MenuItemPedido {
 
 export interface PedidoCreateRequest {
   description: string;
+  metodoPago: string;
+  estado: string;
   menuItems: MenuItemPedido[];
 }
 

@@ -39,7 +39,7 @@ const PedidosResumen = ({
     };
 
     return (
-        <div className="w-full  bg-zinc-50/50 dark:bg-zinc-900/20 p-6 flex flex-col justify-between">
+        <div className="w-full  bg-zinc-50/50 dark:bg-zinc-900/20 p-4 flex flex-col justify-between">
             <div className="flex flex-col overflow-hidden">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 flex items-center gap-2">
@@ -51,7 +51,7 @@ const PedidosResumen = ({
                     </Badge>
                 </div>
             </div>
-            <ScrollArea className="flex-1 pr-1 max-h-[350px]">
+            <ScrollArea className="flex-1 pr-1 max-h-[250px]">
                 {formData.menuItems.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-center py-12 text-zinc-400 space-y-2">
                         <ShoppingBag className="h-10 w-10 stroke-[1.2]" />

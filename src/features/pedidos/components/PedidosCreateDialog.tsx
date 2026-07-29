@@ -16,10 +16,14 @@ import type { PedidoCreateRequest, PedidoFormData } from '../types/pedidos.types
 import { createPedidosResponse } from '../api/pedidos.api';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { validatePedidosFormData } from '../validators/PedidosFormValidator';
 
 const PedidosCreateDialog = () => {
   const [formData, setFormData] = useState<PedidoFormData>({
     description: '',
+    metodoPago: '',
+    estado: '',
     menuItems: []
   })
 
@@ -44,15 +48,27 @@ const PedidosCreateDialog = () => {
       });
       setFormData({
         description: '',
+        metodoPago: '',
+        estado: '',
         menuItems: []
       })
+      toast.success("Pedido creado exitosamente");
     },
+    onError: () => {
+      toast.error("Error al crear el pedido");
+    }
   });
 
   const handleSubmit = async () => {
 
+    if (!validatePedidosFormData(formData)) {
+      return;
+    }
+
     const parseformData: PedidoCreateRequest = {
       description: formData.description,
+      metodoPago: formData.metodoPago,
+      estado: formData.estado,
       menuItems: formData.menuItems.map((item) => {
         return {
           id: item.id,
@@ -62,6 +78,7 @@ const PedidosCreateDialog = () => {
     }
 
     mutationCreate.mutate(parseformData);
+
   }
 
   const isSubmitting = mutationCreate.isPending;
