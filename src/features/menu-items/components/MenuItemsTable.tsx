@@ -109,7 +109,7 @@ const MenuItemTable = () => {
               </TableCell>
 
               <TableCell>
-                <Badge variant={parseAvailable(menuItem.isAvailable) === 'Activo' ? 'success' : 'error'}>
+                <Badge variant={parseAvailable(menuItem.isAvailable) === 'Activo' ? 'Cobrado' : 'Cancelado'}>
                   {parseAvailable(menuItem.isAvailable)}
                 </Badge>
               </TableCell>
@@ -120,7 +120,7 @@ const MenuItemTable = () => {
           ))}
         </TableBody>
         <TableFooter>
-          <TableRow className='bg-white hover:bg-white'>
+          <TableRow className='bg-white dark:bg-zinc-900/40 hover:bg-white'>
             <TableCell colSpan={6} className=''>
               <div className="flex items-center justify-between">
 

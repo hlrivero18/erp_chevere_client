@@ -22,11 +22,11 @@ const badgeVariants = cva(
         success: "bg-green-200 text-green-800",
         error: "bg-red-200 text-red-800",
         Pendiente:
-          "bg-yellow-500/10 text-yellow-800 focus-visible:ring-yellow-500/20 dark:bg-yellow-500/20 dark:focus-visible:ring-yellow-500/40 [a]:hover:bg-yellow-500/20",
+          "bg-yellow-200 text-yellow-800 dark:text-yellow-200 focus-visible:ring-yellow-500/20 dark:bg-yellow-900 dark:focus-visible:ring-yellow-500/40 [a]:hover:bg-yellow-500/20",
         Cobrado:
-          "bg-green-500/10 text-green-800 focus-visible:ring-green-500/20 dark:bg-green-500/20 dark:focus-visible:ring-green-500/40 [a]:hover:bg-green-500/20",
+          "bg-green-200 text-green-800 dark:text-green-200 focus-visible:ring-green-500/20 dark:bg-green-900 dark:focus-visible:ring-green-500/40 [a]:hover:bg-green-500/20",
         Cancelado:
-          "bg-red-500/10 text-red-800 focus-visible:ring-red-500/20 dark:bg-red-500/20 dark:focus-visible:ring-red-500/40 [a]:hover:bg-red-500/20",
+          "bg-red-200 text-red-800 dark:text-red-200 focus-visible:ring-red-500/20 dark:bg-red-900 dark:focus-visible:ring-red-500/40 [a]:hover:bg-red-500/20",
       },
     },
     defaultVariants: {

@@ -7,6 +7,7 @@ import { createMenuItemResponse, updateMenuItemResponse } from '../api/menu-item
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 const MenuItemForm = ({ menuItem = null }: { menuItem?: MenuItem }) => {
   const [formData, setFormData] = useState<MenuItemCreateRequest>({
@@ -24,6 +25,7 @@ const MenuItemForm = ({ menuItem = null }: { menuItem?: MenuItem }) => {
       queryClient.invalidateQueries({
         queryKey: ['menu-items']
       });
+      toast.success('Item creado con éxito')
       setFormData({
         name: '',
         description: '',
@@ -31,6 +33,9 @@ const MenuItemForm = ({ menuItem = null }: { menuItem?: MenuItem }) => {
         isAvailable: true,
       });
     },
+    onError: () => {
+      toast.error('Error al crear item')
+    }
   })
 
   const mutationUpdate = useMutation({

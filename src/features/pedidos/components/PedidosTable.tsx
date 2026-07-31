@@ -15,6 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
 import PedidosDetailDialog from './PedidosDetailDialog';
+import { Badge } from '@/components/ui/badge';
 
 // interface PedidosTableProps {
 //   pedidos: Pedido[];
@@ -74,12 +75,12 @@ const PedidosTable = () => {
         <TableHeader>
           <TableRow>
             <TableHead>ID</TableHead>
-            <TableHead>Descripción</TableHead>
+            <TableHead>Fecha</TableHead>
             <TableHead>Total</TableHead>
             <TableHead>Estado</TableHead>
             <TableHead>Metodo de pago</TableHead>
             <TableHead>Creado por</TableHead>
-            <TableHead>Fecha</TableHead>
+            <TableHead>Nota</TableHead>
             <TableHead className="text-right">
               Acción
             </TableHead>
@@ -93,9 +94,9 @@ const PedidosTable = () => {
               <TableCell className="font-medium">
                 #{pedido.id}
               </TableCell>
-
+              
               <TableCell>
-                {pedido.descripcion || '-'}
+                {new Date(pedido.createdAt).toLocaleDateString('es-AR')}
               </TableCell>
 
               <TableCell>
@@ -103,7 +104,13 @@ const PedidosTable = () => {
               </TableCell>
 
               <TableCell>
-                {pedido.estado}
+                <Badge variant={
+                  pedido.estado === "Pendiente" ? "Pendiente" :
+                  pedido.estado === "Cobrado" ? "Cobrado" :
+                  pedido.estado === "Cancelado" ? "Cancelado" : "default"
+                  }>
+                  {pedido.estado}
+                </Badge>
               </TableCell>
 
               <TableCell>
@@ -116,7 +123,7 @@ const PedidosTable = () => {
               </TableCell>
 
               <TableCell>
-                {new Date(pedido.createdAt).toLocaleDateString('es-PE')}
+                {pedido.descripcion || '-'}
               </TableCell>
 
               <TableCell className="text-right">
@@ -127,7 +134,7 @@ const PedidosTable = () => {
           ))}
         </TableBody>
         <TableFooter>
-          <TableRow className='bg-white hover:bg-white'>
+          <TableRow className='bg-white dark:bg-zinc-900/40 hover:bg-white'>
             <TableCell colSpan={8} className=''>
               <div className="flex items-center justify-between">
 

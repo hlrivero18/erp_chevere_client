@@ -52,7 +52,7 @@ const PedidosCreateDialog = () => {
         estado: '',
         menuItems: []
       })
-      toast.success("Pedido creado exitosamente");
+      toast.success("Pedido creado con éxito");
     },
     onError: () => {
       toast.error("Error al crear el pedido");

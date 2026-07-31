@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import type { Pedido } from '../types/pedidos.types';
 import { Receipt } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const PedidosDetailDialog = ({ pedido }: { pedido: Pedido }) => {
 
@@ -24,7 +25,7 @@ const PedidosDetailDialog = ({ pedido }: { pedido: Pedido }) => {
                 </Button>
             </DialogTrigger>
 
-            <DialogContent className="sm:max-w-[850px]">
+            <DialogContent className="sm:max-w-3/5">
 
                 <DialogHeader className='border-b border-gray-400 pb-4 dark:border-gray-700'>
                     <DialogTitle>
@@ -35,9 +36,11 @@ const PedidosDetailDialog = ({ pedido }: { pedido: Pedido }) => {
                             <h2 className="text-xl md:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
                                 Detalle del pedido #{pedido.id}
                             </h2>
-                            <Badge className='text-sm px-4' variant={pedido.estado === 'Pendiente' ? 'Pendiente' : pedido.estado === 'Cobrado' ? 'Cobrado' : 'Cancelado'}>
-                                {pedido.estado}
-                            </Badge>
+                            <Badge variant={
+                                pedido.estado === "Pendiente" ? "Pendiente" :
+                                    pedido.estado === "Cobrado" ? "Cobrado" :
+                                        pedido.estado === "Cancelado" ? "Cancelado" : "default"
+                            }>{pedido.estado}</Badge>
                         </div>
                     </DialogTitle>
 
@@ -48,25 +51,35 @@ const PedidosDetailDialog = ({ pedido }: { pedido: Pedido }) => {
                 </DialogHeader>
 
                 <div className=''>
-
-                    <p>Descripción: {pedido.descripcion || 'No posee Nota adicional'}</p>
-                    <p>Estado: {pedido.estado}</p>
                     <p>Metodo de pago: {pedido.metodoPago}</p>
                     <p>Creado por: {pedido.createdBy.name} {pedido.createdBy.lastName}</p>
-                    
 
-                    <div className='border bg-zinc-50 rounded-xl border-gray-400 p-3 dark:border-gray-700'>
-                        {pedido.items.map((item) => (
-                            <div key={item.id} className='flex items-center justify-between'>
-                                <span>{item.name}</span>
-                                <span className='bg-amber-100 border px-2 py-1 rounded-full font-bold'>{item.cantidad}</span>
-                                <span className='text-muted-foreground font-semibold'>{item.precio}</span>
+                    <div className='border bg-zinc-50 dark:bg-zinc-800 rounded-xl border-gray-400 p-3 dark:border-gray-700'>
+                        <ScrollArea className="flex-1 pr-1 max-h-[250px]">
+                            {pedido.items.map((item) => (
+                                <div key={item.id} className='flex items-center justify-between'>
+                                    <span className='font-bold'>{item.name}</span>
+                                    <span className='text-xs font-bold'>{item.cantidad}</span>
+                                    <span className='text-xs font-semibold'>${item.precio}</span>
+                                </div>
+                            ))}
+                        </ScrollArea>
+
+                        {/* <div className="pt-4 mt-auto border-t border-zinc-200 dark:border-zinc-800 space-y-4"> */}
+                        <div className="space-y-1.5 text-sm pt-2 mt-3 border-t-2 border-gray-400 dark:border-gray-700">
+                            <div className="flex justify-between text-zinc-500">
+                                <span>Subtotal</span>
+                                <span className="font-mono">${pedido.subTotal}</span>
                             </div>
-                        ))}
-                        <p>Total: {Number(pedido.total).toFixed(2)}</p>
-                        <p>SubTotal: {Number(pedido.subTotal).toFixed(2)}</p>
+                            <div className="flex justify-between text-lg font-bold">
+                                <span>Total</span>
+                                <span className="font-mono text-emerald-600 dark:text-emerald-400">
+                                    ${pedido.total}
+                                </span>
+                            </div>
+                        </div>
                     </div>
-
+                    <p className='font-semibold mt-2 text-xs'>Notas adicionales: {pedido.descripcion || 'No posee nota adicional'}</p>
 
                 </div>
 

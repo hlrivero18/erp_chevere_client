@@ -10,6 +10,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { removeToken } from '@/features/auth/services/auth.service';
+import ThemeToggle from '@/features/theme/components/ThemeToggle';
 import { Home, Package, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router';
 import { useNavigate } from 'react-router';
@@ -59,6 +60,7 @@ const AppSidebar = () => {
             <SidebarMenu>
 
             <SidebarMenuItem>
+                <ThemeToggle/>
                 <SidebarMenuButton onClick={() => {removeToken(); navigate("/login");}}>
                 Cerrar sesión
                 </SidebarMenuButton>
