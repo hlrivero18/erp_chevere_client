@@ -54,7 +54,7 @@ const MenuItemTable = () => {
   return (
     <div className="bg-white p-4 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-3xl shadow-sm overflow-hidden flex flex-col">
 
-      <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className='relative w-1/3'>
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" />
           <Input
@@ -120,7 +120,7 @@ const MenuItemTable = () => {
           ))}
         </TableBody>
         <TableFooter>
-          <TableRow className='bg-white dark:bg-zinc-900/40 hover:bg-white'>
+          <TableRow className='bg-white dark:bg-zinc-950/40 hover:bg-white'>
             <TableCell colSpan={6} className=''>
               <div className="flex items-center justify-between">
 

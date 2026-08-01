@@ -20,7 +20,7 @@ import { useTheme } from 'next-themes';
 
 const AppSidebar = () => {
     const routes = [
-        { name: "Dashboard", path: "/dashboard", icon: <Home /> },
+        { name: "Dashboard", path: "/", icon: <Home /> },
         { name: "Menu", path: "/menu-items", icon: <Package /> },
         { name: "Pedidos", path: "/pedidos", icon: <ShoppingCart /> },
     ]
@@ -28,7 +28,7 @@ const AppSidebar = () => {
     const { theme } = useTheme();
     
     return (
-        <Sidebar>
+        <Sidebar className='border-r-slate-300 dark:border-r-slate-900'>
 
             <SidebarContent>
 
@@ -70,9 +70,13 @@ const AppSidebar = () => {
             <SidebarFooter>
 
                 <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton className='m-0 p-0'>
+                            <ThemeToggle />
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
 
                     <SidebarMenuItem>
-                        <ThemeToggle />
                         <SidebarMenuButton onClick={() => { removeToken(); navigate("/login"); }}>
                             Cerrar sesión
                         </SidebarMenuButton>

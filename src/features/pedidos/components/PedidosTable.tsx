@@ -48,7 +48,7 @@ const PedidosTable = () => {
 
   return (
     <div className="bg-white p-4 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-3xl shadow-sm overflow-hidden flex flex-col">
-      <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className='relative w-1/3'>
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" />
           <Input
@@ -76,11 +76,9 @@ const PedidosTable = () => {
           <TableRow>
             <TableHead>ID</TableHead>
             <TableHead>Fecha</TableHead>
-            <TableHead>Total</TableHead>
             <TableHead>Estado</TableHead>
             <TableHead>Metodo de pago</TableHead>
-            <TableHead>Creado por</TableHead>
-            <TableHead>Nota</TableHead>
+            <TableHead>Total</TableHead>
             <TableHead className="text-right">
               Acción
             </TableHead>
@@ -100,11 +98,7 @@ const PedidosTable = () => {
               </TableCell>
 
               <TableCell>
-                {Number(pedido.total).toFixed(2)}
-              </TableCell>
-
-              <TableCell>
-                <Badge className='p-3' variant={
+                <Badge className='' variant={
                   pedido.estado === "Pendiente" ? "Pendiente" :
                   pedido.estado === "Cobrado" ? "Cobrado" :
                   pedido.estado === "Cancelado" ? "Cancelado" : "default"
@@ -117,13 +111,17 @@ const PedidosTable = () => {
                 {pedido.metodoPago}
               </TableCell>
 
-              <TableCell>
+              {/* <TableCell>
                 {pedido.createdBy.name}{' '}
                 {pedido.createdBy.lastName}
-              </TableCell>
+              </TableCell> */}
 
-              <TableCell>
+              {/* <TableCell>
                 {pedido.descripcion || '-'}
+              </TableCell> */}
+
+              <TableCell className="font-medium">
+                {Number(pedido.total).toFixed(2)}
               </TableCell>
 
               <TableCell className="text-right">
@@ -134,7 +132,7 @@ const PedidosTable = () => {
           ))}
         </TableBody>
         <TableFooter>
-          <TableRow className='bg-white dark:bg-zinc-900/40 hover:bg-white'>
+          <TableRow className='bg-white dark:bg-zinc-950/40 hover:bg-white'>
             <TableCell colSpan={8} className=''>
               <div className="flex items-center justify-between">
 

@@ -9,16 +9,23 @@ export default function ThemeToggle() {
   return (
     <Button
       variant="ghost"
-      size="icon"
+      // size="icon"
       onClick={() =>
         setTheme(theme === "dark" ? "light" : "dark")
       }
     >
       {theme === "dark" ? (
-        <Sun className="size-5" />
+        <span className="flex items-center gap-2">
+          <Sun className="size-5" />
+          Modo claro
+        </span>
       ) : (
-        <Moon className="size-5" />
+        <span className="flex items-center gap-2">
+          <Moon className="size-5" />
+          Modo oscuro
+        </span>
       )}
+      {/* <span>{theme === "dark" ? "Modo claro" : "Modo oscuro"}</span> */}
     </Button>
   );
 }
