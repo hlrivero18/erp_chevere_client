@@ -9,12 +9,30 @@ import {
 
 import { Button } from '@/components/ui/button';
 
-import type { Pedido } from '../types/pedidos.types';
+import type { Pedido, PedidoFormData } from '../types/pedidos.types';
 import { Receipt } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import PedidosCreateDialog from './PedidosCreateDialog';
+import { useState } from 'react';
 
 const PedidosDetailDialog = ({ pedido }: { pedido: Pedido }) => {
+
+    const [open, setOpen] = useState<boolean>(false);
+
+    const parseFormDataEdit: PedidoFormData = {
+        description: pedido.descripcion,
+        metodoPago: pedido.metodoPago,
+        estado: pedido.estado,
+        menuItems: pedido.items.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.precio / item.cantidad,
+            cantidad: item.cantidad,
+            total: item.precio,
+            subTotal: item.precio * 0.79
+        }))
+    }
 
     return (
         <Dialog>
@@ -41,6 +59,12 @@ const PedidosDetailDialog = ({ pedido }: { pedido: Pedido }) => {
                                     pedido.estado === "Cobrado" ? "Cobrado" :
                                         pedido.estado === "Cancelado" ? "Cancelado" : "default"
                             }>{pedido.estado}</Badge>
+                            <PedidosCreateDialog
+                                formDataEdit={parseFormDataEdit}
+                                idEdit={pedido.id}
+                                open={open}
+                                setOpen={setOpen}
+                            />
                         </div>
                     </DialogTitle>
 

@@ -1,29 +1,7 @@
-import { useEffect, useState } from 'react';
 import PedidosTable from '../components/PedidosTable';
-
-import type { Pedido } from '../types/pedidos.types';
-import { getPedidosResponse } from '../api/pedidos.api';
 import PedidosCreateDialog from '../components/PedidosCreateDialog';
 
 const PedidosPage = () => {
-
-    const [pedidos, setPedidos] = useState<Pedido[]>([]);
-    // const [loading, setLoading] = useState(false);
-
-    const loadPedidos = async () => {
-        try {
-            const response = await getPedidosResponse();
-            if (response.success) {
-                setPedidos(response.data.data);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    useEffect(() => {
-        loadPedidos();
-    }, []);
 
     return (
         <div className="space-y-6">
@@ -43,7 +21,7 @@ const PedidosPage = () => {
 
             </div>
 
-            <PedidosTable pedidos={pedidos} />
+            <PedidosTable />
 
         </div>
     );

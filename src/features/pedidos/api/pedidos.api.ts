@@ -16,3 +16,8 @@ export const createPedidosResponse = async (data: PedidoCreateRequest): Promise<
     const response = await api.post<PedidoCreateResponse>('/pedidos/', data);
     return response.data;
 }
+
+export const updatePedidosResponse = async (id: number, data: PedidoCreateRequest): Promise<PedidoCreateResponse> => {
+    const response = await api.put<PedidoCreateResponse>(`/pedidos/` + id, data);
+    return response.data;
+}

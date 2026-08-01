@@ -6,10 +6,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 
 const PedidosForm = ({
+    isEdit,
     formData,
     setFormData,
     onsubmit
 }: {
+    isEdit: boolean;
     formData: PedidoFormData;
     setFormData: (formData: PedidoFormData) => void;
     onsubmit: () => void;
@@ -58,7 +60,7 @@ const PedidosForm = ({
                         <SelectContent>
                             <SelectItem value="Pendiente">Pendiente</SelectItem>
                             <SelectItem value="Cobrado">Cobrado</SelectItem>
-                            {/* <SelectItem value="Cancelado">Cancelado</SelectItem> */}
+                            {isEdit && <SelectItem value="Cancelado">Cancelado</SelectItem>}
                         </SelectContent>
                     </Select>
                 </div>

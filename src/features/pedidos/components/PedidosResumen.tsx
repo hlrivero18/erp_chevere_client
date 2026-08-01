@@ -11,7 +11,7 @@ const PedidosResumen = ({
     totales,
     onDeleteItem,
     onsubmit,
-    isSubmitting
+    isSubmitting,
 }: {
     formData: PedidoFormData;
     setFormData: (data: PedidoFormData) => void;

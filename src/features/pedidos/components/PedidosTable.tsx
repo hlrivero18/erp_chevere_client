@@ -104,7 +104,7 @@ const PedidosTable = () => {
               </TableCell>
 
               <TableCell>
-                <Badge variant={
+                <Badge className='p-3' variant={
                   pedido.estado === "Pendiente" ? "Pendiente" :
                   pedido.estado === "Cobrado" ? "Cobrado" :
                   pedido.estado === "Cancelado" ? "Cancelado" : "default"
