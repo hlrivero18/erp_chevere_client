@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/sidebar';
 import { removeToken } from '@/features/auth/services/auth.service';
 import ThemeToggle from '@/features/theme/components/ThemeToggle';
-import { Home, Package, ShoppingCart } from 'lucide-react';
+import { BookOpenText, Home, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router';
 import { useNavigate } from 'react-router';
 import logoDark from '../../assets/logos/PNFO.png'
@@ -21,7 +21,7 @@ import { useTheme } from 'next-themes';
 const AppSidebar = () => {
     const routes = [
         { name: "Dashboard", path: "/", icon: <Home /> },
-        { name: "Menu", path: "/menu-items", icon: <Package /> },
+        { name: "Menu", path: "/menu-items", icon: <BookOpenText /> },
         { name: "Pedidos", path: "/pedidos", icon: <ShoppingCart /> },
     ]
     const navigate = useNavigate();
@@ -71,9 +71,9 @@ const AppSidebar = () => {
 
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton className='m-0 p-0'>
+                        {/* <SidebarMenuButton className='m-0 p-0'> */}
                             <ThemeToggle />
-                        </SidebarMenuButton>
+                        {/* </SidebarMenuButton> */}
                     </SidebarMenuItem>
 
                     <SidebarMenuItem>

@@ -8,6 +8,7 @@ export default function ThemeToggle() {
 
   return (
     <Button
+      className='w-full justify-start'
       variant="ghost"
       // size="icon"
       onClick={() =>

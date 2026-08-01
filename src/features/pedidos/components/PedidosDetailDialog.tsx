@@ -37,13 +37,12 @@ const PedidosDetailDialog = ({ pedido }: { pedido: Pedido }) => {
     return (
         <Dialog>
 
-            <DialogTrigger>
-                <Button variant="outline" size="xs">
+            <DialogTrigger render={<Button variant="outline" size="xs"/>}>
                     Ver detalle
-                </Button>
+                {/* </Button> */}
             </DialogTrigger>
 
-            <DialogContent className="sm:max-w-3/5">
+            <DialogContent className="lg:max-w-[600px]">
 
                 <DialogHeader className='border-b border-gray-400 pb-4 dark:border-gray-700'>
                     <DialogTitle>
@@ -68,8 +67,8 @@ const PedidosDetailDialog = ({ pedido }: { pedido: Pedido }) => {
                         </div>
                     </DialogTitle>
 
-                    <DialogDescription>
-                        <p className='text-xs font-semibold text-muted-foreground'>Fecha: {new Date(pedido.createdAt).toLocaleDateString('es-AR')} {new Date(pedido.createdAt).toLocaleTimeString('es-AR')}</p>
+                    <DialogDescription render={<p className='text-xs font-semibold text-muted-foreground'/>}>
+                        Fecha: {new Date(pedido.createdAt).toLocaleDateString('es-AR')} {new Date(pedido.createdAt).toLocaleTimeString('es-AR')}
                     </DialogDescription>
 
                 </DialogHeader>
@@ -78,13 +77,12 @@ const PedidosDetailDialog = ({ pedido }: { pedido: Pedido }) => {
                     <p>Metodo de pago: {pedido.metodoPago}</p>
                     <p>Creado por: {pedido.createdBy.name} {pedido.createdBy.lastName}</p>
 
-                    <div className='border bg-zinc-50 dark:bg-zinc-800 rounded-xl border-gray-400 p-3 dark:border-gray-700'>
+                    <div className='border bg-zinc-50 dark:bg-black rounded-xl border-gray-400 p-3 dark:border-gray-700'>
                         <ScrollArea className="flex-1 pr-1 max-h-[250px]">
                             {pedido.items.map((item) => (
-                                <div key={item.id} className='flex items-center justify-between'>
-                                    <span className='font-bold'>{item.name}</span>
-                                    <span className='text-xs font-bold'>{item.cantidad}</span>
-                                    <span className='text-xs font-semibold'>${item.precio}</span>
+                                <div key={item.id} className='my-2 flex items-center justify-between'>
+                                    <span className='text-xs font-mono'>{item.name} X {item.cantidad}</span>                                   
+                                    <span className='text-xs font-mono'>${item.precio}</span>
                                 </div>
                             ))}
                         </ScrollArea>

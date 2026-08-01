@@ -6,6 +6,7 @@ import MenuItemsPage from '@/features/menu-items/pages/MenuItemsPage';
 import ProtectedRoute from './ProtectedRoute';
 import MainLayout from '@/components/layout/MainLayout';
 import PedidosPage from '@/features/pedidos/pages/PedidosPage';
+import DashboardPage from '@/features/dashboard/pages/DashboardPage';
 
 const AppRouter = () => {
   return (
@@ -23,7 +24,7 @@ const AppRouter = () => {
         <Route element={<MainLayout />}>
           <Route
             path="/"
-            element={null}
+            element={<DashboardPage/>}
           />
           <Route
             path="/menu-items"
