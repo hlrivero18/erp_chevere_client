@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/sidebar';
 import { removeToken } from '@/features/auth/services/auth.service';
 import ThemeToggle from '@/features/theme/components/ThemeToggle';
-import { BookOpenText, Home, ShoppingCart } from 'lucide-react';
+import { BookOpenText, Home, List, Plus, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router';
 import { useNavigate } from 'react-router';
 import logoDark from '../../assets/logos/PNFO.png'
@@ -31,12 +31,14 @@ const AppSidebar = () => {
             icon: <ShoppingCart />,
             items: [
                 {
-                    title: "Listado de pedidos",
+                    title: "Bandeja de pedidos",
                     url: "/pedidos",
+                    icon: <List />
                 },
                 {
                     title: "Nuevo pedido",
                     url: "/pedidos/nuevo",
+                    icon: <Plus />
                 },
             ]
         },
@@ -79,18 +81,20 @@ const AppSidebar = () => {
                             {folder.map((item, idx) => (
                                 <SidebarMenuItem key={idx}>
                                     <Collapsible>
-                                        <CollapsibleTrigger>
-                                            <SidebarMenuButton>
-                                                {item.icon} {item.name}
-                                            </SidebarMenuButton>
-                                        </CollapsibleTrigger>
+                                        <SidebarMenuButton>
+                                            <CollapsibleTrigger>
+                                                <div className='flex flex-1 items-center gap-2 dark:hover:text-primary'>
+                                                    {item.icon} {item.name}
+                                                </div>
+                                            </CollapsibleTrigger>
+                                        </SidebarMenuButton>
                                         <CollapsibleContent>
                                             <SidebarMenu>
                                                 {item.items.map((subItem, subIdx) => (
                                                     <SidebarMenuItem key={subIdx}>
                                                         <SidebarMenuButton>
-                                                            <Link className='flex flex-1 items-center gap-2 dark:hover:text-primary' to={subItem.url}>
-                                                                {subItem.title}
+                                                            <Link className='flex flex-1 items-center gap-2 dark:hover:text-primary pl-4' to={subItem.url}>
+                                                                {subItem.icon} {subItem.title}
                                                             </Link>
                                                         </SidebarMenuButton>
                                                     </SidebarMenuItem>

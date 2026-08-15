@@ -8,6 +8,7 @@ import { createPedidosResponse, updatePedidosResponse } from "../api/pedidos.api
 import { toast } from "sonner";
 import { validatePedidosFormData } from "../validators/PedidosFormValidator";
 import PedidoResumen from "../components/PedidoResumen";
+import { calTotales } from "../utils/PedidosUtils";
 
 interface PedidosCreateDialogProps {
     formDataEdit?: PedidoFormData | null
@@ -21,20 +22,13 @@ const PedidosCreate = ({ formDataEdit, idEdit }: PedidosCreateDialogProps) => {
         estado: formDataEdit?.estado || '',
         envio: formDataEdit?.envio || null,
         descuento: formDataEdit?.descuento || null,
+        recargo: formDataEdit?.recargo || null,
         menuItems: formDataEdit?.menuItems || []
     })
 
     const queryClient = useQueryClient();
 
-    const handleTotales = (): { total: number; subTotal: number, conEnvio: number, conDescuento: number, totalDesEnvio: number } => {
-        const total = formData.menuItems.map((item) => item.price * item.cantidad).reduce((a, b) => a + b, 0);
-        const subTotal = total * 0.79;
-        const conEnvio = total + formData.envio;
-        const porcentaje = formData.descuento != 0 ? formData.descuento / 100 : 0;
-        const conDescuento = total - (total * porcentaje);
-        const totalDesEnvio = (conDescuento) + formData.envio;
-        return { total, subTotal, conEnvio, conDescuento, totalDesEnvio };
-    }
+    const handleTotales = calTotales(null, formData);
 
     const handleDeleteItem = (id: number) => {
         const newMenuItems = formData.menuItems.filter((item) => item.id !== id);
@@ -52,8 +46,9 @@ const PedidosCreate = ({ formDataEdit, idEdit }: PedidosCreateDialogProps) => {
                 metodoPago: '',
                 estado: '',
                 menuItems: [],
-                envio: null,
-                descuento: null,
+                envio: 0,
+                descuento: 0,
+                recargo: 0,
             })
             toast.success("Pedido creado con éxito");
         },
@@ -80,7 +75,7 @@ const PedidosCreate = ({ formDataEdit, idEdit }: PedidosCreateDialogProps) => {
 
     const handleSubmit = async () => {
 
-        const totales = handleTotales();
+        const totales = handleTotales;
 
         if (!validatePedidosFormData(formData)) {
             return;
@@ -96,10 +91,11 @@ const PedidosCreate = ({ formDataEdit, idEdit }: PedidosCreateDialogProps) => {
                     quantity: item.cantidad
                 }
             }),
-            total: totales.conDescuento,
+            total: totales.total,
             subTotal: totales.subTotal,
             envio: formData.envio || 0,
-            descuento: formData.descuento || 0
+            descuento: formData.descuento || 0,
+            recargo: formData.recargo || 0
         }
 
         if (!formDataEdit) {
@@ -139,7 +135,7 @@ const PedidosCreate = ({ formDataEdit, idEdit }: PedidosCreateDialogProps) => {
                 <PedidoResumen
                     formData={formData}
                     setFormData={setFormData}
-                    totales={handleTotales()}
+                    totales={handleTotales}
                     onDeleteItem={handleDeleteItem}
                     onsubmit={handleSubmit}
                     isSubmitting={isSubmitting}

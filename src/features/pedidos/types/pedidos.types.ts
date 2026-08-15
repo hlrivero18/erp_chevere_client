@@ -8,8 +8,8 @@ export interface PedidoUser {
 
 export interface Pedido {
   id: number;
-  total: string;
-  subTotal: string;
+  total: number;
+  subTotal: number;
   descripcion: string;
   estado: string;
   metodoPago: string;
@@ -20,6 +20,7 @@ export interface Pedido {
   items: PedidoItem[];
   envio?: number;
   descuento?: number;
+  recargo?: number;
 }
 
 export interface PedidoItem {
@@ -35,6 +36,7 @@ export interface PedidoFormData {
   estado: string;
   envio?: number;
   descuento?: number;
+  recargo?: number;
   menuItems: MenuItemFormData[];
 }
 
@@ -66,8 +68,17 @@ export interface PedidoCreateRequest {
   subTotal: number;
   envio?: number;
   descuento?: number;
+  recargo?: number;
 }
 
 export type PedidoCreateResponse = ApiResponse<{
   data: Pedido;
 }>;
+
+export type PedidosCalTotales = {
+  total: number;
+  subTotal: number;
+  conCargos: number;
+  descuento: number;
+  recargo: number;
+}

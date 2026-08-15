@@ -12,6 +12,7 @@ const pedidoSchema = z.object({
     })).min(1, "Debe haber al menos un item"),
     envio: z.number().min(0, "El envio debe ser mayor o igual a 0").optional(),
     descuento: z.number().min(0, "El descuento debe ser mayor o igual a 0").max(100, "El descuento debe ser menor o igual a 100").optional(),
+    recargo: z.number().min(0, "El recargo debe ser mayor o igual a 0").max(100, "El recargo debe ser menor o igual a 100").optional(),
 })
 
 
@@ -21,6 +22,9 @@ export const validatePedidosFormData = (formData: PedidoFormData) => {
     }
     if (formData.descuento == null) {
         formData.descuento = 0;
+    }
+    if (formData.recargo == null) {
+        formData.recargo = 0;
     }
     const validation = pedidoSchema.safeParse(formData);
 

@@ -16,10 +16,8 @@ import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
 import PedidosDetailDialog from './PedidosDetailDialog';
 import { Badge } from '@/components/ui/badge';
+import { truncarTexto } from '../utils/PedidosUtils';
 
-// interface PedidosTableProps {
-//   pedidos: Pedido[];
-// }
 
 const PedidosTable = () => {
   const [page, setPage] = useState<number>(1);
@@ -78,6 +76,7 @@ const PedidosTable = () => {
             <TableHead>Fecha</TableHead>
             <TableHead>Estado</TableHead>
             <TableHead>Metodo de pago</TableHead>
+            <TableHead>Nota</TableHead>
             <TableHead>Total</TableHead>
             <TableHead className="text-right">
               Acción
@@ -116,9 +115,9 @@ const PedidosTable = () => {
                 {pedido.createdBy.lastName}
               </TableCell> */}
 
-              {/* <TableCell>
-                {pedido.descripcion || '-'}
-              </TableCell> */}
+              <TableCell>
+                {truncarTexto(pedido.descripcion || '-', 30)}
+              </TableCell>
 
               <TableCell className="font-medium">
                 {Number(pedido.total).toFixed(2)}

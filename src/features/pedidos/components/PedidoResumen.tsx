@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import type { MenuItemFormData, PedidoFormData } from "../types/pedidos.types";
+import type { MenuItemFormData, PedidoFormData, PedidosCalTotales } from "../types/pedidos.types";
 import { DollarSign, Minus, Percent, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ const PedidoResumen = ({
 }: {
     formData: PedidoFormData;
     setFormData: (data: PedidoFormData) => void;
-    totales: { total: number; subTotal: number; conEnvio: number, totalDesEnvio: number }
+    totales: PedidosCalTotales;
     onDeleteItem: (id: number) => void;
     onsubmit: () => void;
     isSubmitting: boolean;
@@ -150,13 +150,29 @@ const PedidoResumen = ({
                         </div>
                     </div>
                     <div className="flex justify-between text-zinc-500">
+                        <label>Recargo (%)</label>
+                        <div className='relative'>
+                            <Percent className="absolute left-2.5 top-2.5 h-3 w-3" />
+                            <Input
+                                type="number"
+                                id="recargo"
+                                placeholder="0"
+                                className="
+                                [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+                                w-20 h-8 font-mono rounded-xs pl-7 text-sm"
+                                value={formData.recargo}
+                                onChange={(e) => setFormData({ ...formData, recargo: Number(e.target.value) })}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex justify-between text-zinc-500">
                         <span>Subtotal</span>
                         <span className="font-mono">${totales.total}</span>
                     </div>
                     <div className="flex justify-between text-lg font-bold">
                         <span>Total</span>
                         <span className="font-mono text-emerald-600 dark:text-emerald-400">
-                            ${totales.totalDesEnvio}
+                            ${totales.conCargos}
                         </span>
                     </div>
                 </div>

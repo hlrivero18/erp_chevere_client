@@ -19,6 +19,7 @@ import { toast } from 'sonner';
 import { validatePedidosFormData } from '../validators/PedidosFormValidator';
 import { Edit } from 'lucide-react';
 import PedidoResumen from './PedidoResumen';
+import { calTotales } from '../utils/PedidosUtils';
 
 interface PedidosCreateDialogProps {
   formDataEdit?: PedidoFormData | null
@@ -32,6 +33,7 @@ const PedidosCreateDialog = ({ formDataEdit, idEdit, open, setOpen }: PedidosCre
     description: formDataEdit?.description || '',
     metodoPago: formDataEdit?.metodoPago || '',
     estado: formDataEdit?.estado || '',
+    recargo: formDataEdit?.recargo || null,
     envio: formDataEdit?.envio || null,
     descuento: formDataEdit?.descuento || null,
     menuItems: formDataEdit?.menuItems || []
@@ -39,16 +41,8 @@ const PedidosCreateDialog = ({ formDataEdit, idEdit, open, setOpen }: PedidosCre
 
   const queryClient = useQueryClient();
 
-  const handleTotales = (): { total: number; subTotal: number, conEnvio: number, conDescuento: number, totalDesEnvio: number } => {
-    const total = formData.menuItems.map((item) => item.price * item.cantidad).reduce((a, b) => a + b, 0);
-    const subTotal = total * 0.79;
-    const conEnvio = total + formData.envio;
-    const porcentaje = formData.descuento != 0 ? formData.descuento / 100 : 0;
-    const conDescuento = total - (total * porcentaje);
-    const totalDesEnvio = (conDescuento) + formData.envio;
-    console.log(`total: ${total}, subTotal: ${subTotal}, conEnvio: ${conEnvio}, conDescuento: ${conDescuento}, totalDesEnvio: ${totalDesEnvio}`)
-    return { total, subTotal, conEnvio, conDescuento, totalDesEnvio };
-  }
+  const handleTotales = calTotales(null, formData);
+  
   const handleDeleteItem = (id: number) => {
     const newMenuItems = formData.menuItems.filter((item) => item.id !== id);
     setFormData({ ...formData, menuItems: newMenuItems });
@@ -64,6 +58,9 @@ const PedidosCreateDialog = ({ formDataEdit, idEdit, open, setOpen }: PedidosCre
         description: '',
         metodoPago: '',
         estado: '',
+        recargo: null,
+        envio: null,
+        descuento: null,
         menuItems: []
       })
       toast.success("Pedido creado con éxito");
@@ -96,7 +93,7 @@ const PedidosCreateDialog = ({ formDataEdit, idEdit, open, setOpen }: PedidosCre
       return;
     }
 
-    const totales = handleTotales();
+    const totales = handleTotales;
 
     const parseformData: PedidoCreateRequest = {
       description: formData.description,
@@ -108,10 +105,11 @@ const PedidosCreateDialog = ({ formDataEdit, idEdit, open, setOpen }: PedidosCre
           quantity: item.cantidad
         }
       }),
-      total: totales.conDescuento,
+      total: totales.total,
       subTotal: totales.subTotal,
       envio: formData.envio || 0,
-      descuento: formData.descuento || 0
+      descuento: formData.descuento || 0,
+      recargo: formData.recargo || 0,
     }
 
     if (!formDataEdit) {
@@ -157,7 +155,7 @@ const PedidosCreateDialog = ({ formDataEdit, idEdit, open, setOpen }: PedidosCre
           <PedidoResumen
             formData={formData}
             setFormData={setFormData}
-            totales={handleTotales()}
+            totales={handleTotales}
             onDeleteItem={handleDeleteItem}
             onsubmit={handleSubmit}
             isSubmitting={isSubmitting}
