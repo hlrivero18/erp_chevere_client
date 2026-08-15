@@ -7,6 +7,7 @@ import ProtectedRoute from './ProtectedRoute';
 import MainLayout from '@/components/layout/MainLayout';
 import PedidosPage from '@/features/pedidos/pages/PedidosPage';
 import DashboardPage from '@/features/dashboard/pages/DashboardPage';
+import PedidosCreate from '@/features/pedidos/pages/PedidosCreate';
 
 const AppRouter = () => {
   return (
@@ -33,6 +34,10 @@ const AppRouter = () => {
           <Route
             path="/pedidos"
             element={<PedidosPage />}
+          />
+          <Route
+            path="/pedidos/nuevo"
+            element={<PedidosCreate />}
           />
         </Route>
 

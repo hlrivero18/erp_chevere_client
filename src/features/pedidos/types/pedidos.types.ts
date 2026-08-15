@@ -18,6 +18,8 @@ export interface Pedido {
   updatedAt: string;
   updatedBy: PedidoUser | null;
   items: PedidoItem[];
+  envio?: number;
+  descuento?: number;
 }
 
 export interface PedidoItem {
@@ -31,6 +33,8 @@ export interface PedidoFormData {
   description: string;
   metodoPago: string;
   estado: string;
+  envio?: number;
+  descuento?: number;
   menuItems: MenuItemFormData[];
 }
 
@@ -58,6 +62,10 @@ export interface PedidoCreateRequest {
   metodoPago: string;
   estado: string;
   menuItems: MenuItemPedido[];
+  total: number;
+  subTotal: number;
+  envio?: number;
+  descuento?: number;
 }
 
 export type PedidoCreateResponse = ApiResponse<{

@@ -20,6 +20,8 @@ const PedidosDetailDialog = ({ pedido }: { pedido: Pedido }) => {
 
     const [open, setOpen] = useState<boolean>(false);
 
+    console.log(typeof pedido.envio)
+
     const parseFormDataEdit: PedidoFormData = {
         description: pedido.descripcion,
         metodoPago: pedido.metodoPago,
@@ -31,7 +33,9 @@ const PedidosDetailDialog = ({ pedido }: { pedido: Pedido }) => {
             cantidad: item.cantidad,
             total: item.precio,
             subTotal: item.precio * 0.79
-        }))
+        })),
+        envio: pedido.envio,
+        descuento: pedido.descuento
     }
 
     return (

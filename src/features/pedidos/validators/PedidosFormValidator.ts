@@ -9,11 +9,19 @@ const pedidoSchema = z.object({
     menuItems: z.array(z.object({
         id: z.number(),
         cantidad: z.number().min(1, "La cantidad debe ser mayor a 0")
-    })).min(1, "Debe haber al menos un item")
+    })).min(1, "Debe haber al menos un item"),
+    envio: z.number().min(0, "El envio debe ser mayor o igual a 0").optional(),
+    descuento: z.number().min(0, "El descuento debe ser mayor o igual a 0").max(100, "El descuento debe ser menor o igual a 100").optional(),
 })
 
 
 export const validatePedidosFormData = (formData: PedidoFormData) => {
+    if (formData.envio == null) {
+        formData.envio = 0;
+    }
+    if (formData.descuento == null) {
+        formData.descuento = 0;
+    }
     const validation = pedidoSchema.safeParse(formData);
 
     if (!validation.success) {

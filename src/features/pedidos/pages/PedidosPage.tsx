@@ -1,5 +1,6 @@
+import { Button } from '@/components/ui/button';
 import PedidosTable from '../components/PedidosTable';
-import PedidosCreateDialog from '../components/PedidosCreateDialog';
+import { Link } from 'react-router';
 
 const PedidosPage = () => {
 
@@ -17,7 +18,15 @@ const PedidosPage = () => {
                     </p>
                 </div>
 
-                <PedidosCreateDialog/>
+                <div>
+                    <Link
+                    to="/pedidos/nuevo"
+                    >
+                        <Button>
+                            Nuevo pedido
+                        </Button>
+                    </Link>
+                </div>
 
             </div>
 

@@ -10,7 +10,6 @@ import {
 import { Button } from '@/components/ui/button';
 
 import PedidosForm from './PedidosForm';
-import PedidosResumen from './PedidosResumen';
 import { useState } from 'react';
 import type { PedidoCreateRequest, PedidoFormData } from '../types/pedidos.types';
 import { createPedidosResponse, updatePedidosResponse } from '../api/pedidos.api';
@@ -19,6 +18,7 @@ import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { validatePedidosFormData } from '../validators/PedidosFormValidator';
 import { Edit } from 'lucide-react';
+import PedidoResumen from './PedidoResumen';
 
 interface PedidosCreateDialogProps {
   formDataEdit?: PedidoFormData | null
@@ -32,17 +32,23 @@ const PedidosCreateDialog = ({ formDataEdit, idEdit, open, setOpen }: PedidosCre
     description: formDataEdit?.description || '',
     metodoPago: formDataEdit?.metodoPago || '',
     estado: formDataEdit?.estado || '',
+    envio: formDataEdit?.envio || null,
+    descuento: formDataEdit?.descuento || null,
     menuItems: formDataEdit?.menuItems || []
   })
 
   const queryClient = useQueryClient();
 
-  const handleTotales = (): { total: number; subTotal: number } => {
+  const handleTotales = (): { total: number; subTotal: number, conEnvio: number, conDescuento: number, totalDesEnvio: number } => {
     const total = formData.menuItems.map((item) => item.price * item.cantidad).reduce((a, b) => a + b, 0);
-    const subTotal = total * 0.79
-    return { total, subTotal };
+    const subTotal = total * 0.79;
+    const conEnvio = total + formData.envio;
+    const porcentaje = formData.descuento != 0 ? formData.descuento / 100 : 0;
+    const conDescuento = total - (total * porcentaje);
+    const totalDesEnvio = (conDescuento) + formData.envio;
+    console.log(`total: ${total}, subTotal: ${subTotal}, conEnvio: ${conEnvio}, conDescuento: ${conDescuento}, totalDesEnvio: ${totalDesEnvio}`)
+    return { total, subTotal, conEnvio, conDescuento, totalDesEnvio };
   }
-
   const handleDeleteItem = (id: number) => {
     const newMenuItems = formData.menuItems.filter((item) => item.id !== id);
     setFormData({ ...formData, menuItems: newMenuItems });
@@ -90,6 +96,8 @@ const PedidosCreateDialog = ({ formDataEdit, idEdit, open, setOpen }: PedidosCre
       return;
     }
 
+    const totales = handleTotales();
+
     const parseformData: PedidoCreateRequest = {
       description: formData.description,
       metodoPago: formData.metodoPago,
@@ -99,7 +107,11 @@ const PedidosCreateDialog = ({ formDataEdit, idEdit, open, setOpen }: PedidosCre
           id: item.id,
           quantity: item.cantidad
         }
-      })
+      }),
+      total: totales.conDescuento,
+      subTotal: totales.subTotal,
+      envio: formData.envio || 0,
+      descuento: formData.descuento || 0
     }
 
     if (!formDataEdit) {
@@ -123,7 +135,7 @@ const PedidosCreateDialog = ({ formDataEdit, idEdit, open, setOpen }: PedidosCre
         {formDataEdit ? <Edit /> : 'Nuevo Pedido'}
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[850px]">
+      <DialogContent className="sm:max-w-[850px] sm:max-h-[600px] overflow-y-auto ">
 
         <DialogHeader>
           <DialogTitle>
@@ -142,7 +154,7 @@ const PedidosCreateDialog = ({ formDataEdit, idEdit, open, setOpen }: PedidosCre
             setFormData={setFormData}
             onsubmit={handleSubmit}
           />
-          <PedidosResumen
+          <PedidoResumen
             formData={formData}
             setFormData={setFormData}
             totales={handleTotales()}

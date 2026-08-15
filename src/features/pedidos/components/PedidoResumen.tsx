@@ -1,12 +1,12 @@
-import { Badge } from "@/components/ui/badge"
-import { DollarSign, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react"
-import type { MenuItemFormData, PedidoFormData } from "../types/pedidos.types"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Button } from "@/components/ui/button"
-import { DialogClose } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge";
+import type { MenuItemFormData, PedidoFormData } from "../types/pedidos.types";
+import { DollarSign, Minus, Percent, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { Input } from "@base-ui/react";
+import { Card } from "@/components/ui/card";
 
-const PedidosResumen = ({
+const PedidoResumen = ({
     formData,
     setFormData,
     totales,
@@ -16,7 +16,7 @@ const PedidosResumen = ({
 }: {
     formData: PedidoFormData;
     setFormData: (data: PedidoFormData) => void;
-    totales: { total: number; subTotal: number }
+    totales: { total: number; subTotal: number; conEnvio: number, totalDesEnvio: number }
     onDeleteItem: (id: number) => void;
     onsubmit: () => void;
     isSubmitting: boolean;
@@ -38,9 +38,8 @@ const PedidosResumen = ({
             }
         }
     };
-
     return (
-        <div className="w-full  bg-zinc-50/50 dark:bg-zinc-900/20 p-4 flex flex-col justify-between">
+        <div className="w-full p-4 flex flex-col justify-between">
             <div className="flex flex-col overflow-hidden">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 flex items-center gap-2">
@@ -62,9 +61,9 @@ const PedidosResumen = ({
                 ) : (
                     <div className="space-y-2.5 pr-2">
                         {formData.menuItems.map((item) => (
-                            <div
+                            <Card
                                 key={item.id}
-                                className="bg-white dark:bg-zinc-900 p-3 rounded-lg border border-zinc-200/80 dark:border-zinc-800 shadow-sm flex flex-col gap-2"
+                                className="p-3 rounded-lg border border-zinc-200/80 dark:border-zinc-800 shadow-sm flex flex-col gap-2"
                             >
                                 <div className="flex justify-between items-start gap-2">
                                     <span className="text-sm font-medium leading-snug">
@@ -111,7 +110,7 @@ const PedidosResumen = ({
                                         ${(item.price * item.cantidad).toFixed(2)}
                                     </span>
                                 </div>
-                            </div>
+                            </Card>
                         ))}
                     </div>
                 )}
@@ -119,16 +118,13 @@ const PedidosResumen = ({
             <div className="pt-4 mt-auto border-t border-zinc-200 dark:border-zinc-800 space-y-4">
                 <div className="space-y-1.5 text-sm">
                     <div className="flex justify-between text-zinc-500">
-                        <span>Subtotal</span>
-                        <span className="font-mono">${totales.subTotal}</span>
-                    </div>
-                    <div className="flex justify-between text-zinc-500">
                         <label>Envio</label>
                         <div className='relative'>
                             <DollarSign className="absolute left-2.5 top-2.5 h-3 w-3" />
                             <Input
+                                id="envio"
                                 type="number"
-                                defaultValue="0.00"
+                                placeholder="0.00"
                                 className="
                                 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
                                 w-20 h-8 font-mono rounded-xs pl-7 text-sm"
@@ -136,52 +132,47 @@ const PedidosResumen = ({
                                 onChange={(e) => setFormData({ ...formData, envio: Number(e.target.value) })}
                             />
                         </div>
-
+                    </div>
+                    <div className="flex justify-between text-zinc-500">
+                        <label>Descuento (%)</label>
+                        <div className='relative'>
+                            <Percent className="absolute left-2.5 top-2.5 h-3 w-3" />
+                            <Input
+                                type="number"
+                                id="descuento"
+                                placeholder="0"
+                                className="
+                                [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+                                w-20 h-8 font-mono rounded-xs pl-7 text-sm"
+                                value={formData.descuento}
+                                onChange={(e) => setFormData({ ...formData, descuento: Number(e.target.value) })}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex justify-between text-zinc-500">
+                        <span>Subtotal</span>
+                        <span className="font-mono">${totales.total}</span>
                     </div>
                     <div className="flex justify-between text-lg font-bold">
                         <span>Total</span>
                         <span className="font-mono text-emerald-600 dark:text-emerald-400">
-                            ${totales.total}
+                            ${totales.totalDesEnvio}
                         </span>
                     </div>
                 </div>
                 <div className="flex gap-2">
-                    <DialogClose
-                        render={
-                            <Button
-                                type="button"
-                                variant="outline"
-                                className="w-1/3"
-                                data-slot="dialog-close"
-                                disabled={isSubmitting}
-                            >
-                                Cancelar
-                            </Button>
-                        }
-                    />
-                    {/* <Button
-                        type="button"
-                        variant="outline"
-                        className="w-1/3"
-                        data-slot="dialog-close"
-                    // onClick={onClose}
-                    >
-                        Cancelar
-                    </Button> */}
-
                     <Button
                         type="button"
-                        className="w-2/3"
-                        // disabled={selectedItems.length === 0 || isSubmitting}
+                        className={`w-full ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                         onClick={onsubmit}
+                        disabled={isSubmitting}
                     >
-                        Confirmar Pedido
+                        {isSubmitting ? 'Procesando...' : 'Confirmar Pedido'}
                     </Button>
                 </div>
             </div>
         </div>
-    )
+    );
+};
 
-}
-
-export default PedidosResumen
+export default PedidoResumen;
