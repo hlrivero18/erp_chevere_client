@@ -1,7 +1,7 @@
 import api from "@/lib/axios";
 import type { ReportesGeneralesResponse } from "../types/dashboard.types";
 
-export const getReportesGenerales = async (year: string, month: string, day?: string): Promise<ReportesGeneralesResponse> => {
+export const getReportesFilter = async (year: string, month: string, day?: string): Promise<ReportesGeneralesResponse> => {
     const response = await api.get<ReportesGeneralesResponse>('/reportes/?', {
         params: {
             year,
@@ -9,5 +9,11 @@ export const getReportesGenerales = async (year: string, month: string, day?: st
             day
         }
     });
+    return response.data;
+}
+
+export const getReportesGenerales = async (): Promise<ReportesGeneralesResponse> => {
+    const response = await api.get<ReportesGeneralesResponse>('/reportes/general');
+    
     return response.data;
 }
