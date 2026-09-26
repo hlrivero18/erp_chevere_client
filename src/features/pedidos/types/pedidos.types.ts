@@ -82,3 +82,7 @@ export type PedidosCalTotales = {
   descuento: number;
   recargo: number;
 }
+
+export interface PedidoStatusRequest {
+  estado: string;
+}

@@ -3,7 +3,7 @@ import type { LoginResponse } from '../types/auth.types';
 const TOKEN_KEY = 'access_token';
 
 export const saveToken = (response: LoginResponse) => {
-  console.log(TOKEN_KEY)
+  // console.log(TOKEN_KEY)
   localStorage.setItem(TOKEN_KEY, response.data.token);
 };
 

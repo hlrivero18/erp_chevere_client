@@ -10,18 +10,21 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import { getPedidosResponse } from '../api/pedidos.api';
+import { getPedidosResponse } from '../../api/pedidos.api';
 import { useQuery } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
-import PedidosDetailDialog from './PedidosDetailDialog';
+import PedidosDetailDialog from '../pedidosDetail/PedidosDetailDialog';
 import { Badge } from '@/components/ui/badge';
-import { truncarTexto } from '../utils/PedidosUtils';
+import { truncarTexto } from '../../utils/PedidosUtils';
+import FiltersPedidosTable from './FiltersPedidosTable';
 
 
 const PedidosTable = () => {
   const [page, setPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
 
   const handlePageChange = (newPage: number) => {
     const nextPage = page + newPage;
@@ -36,8 +39,8 @@ const PedidosTable = () => {
     // isError,
     // error
   } = useQuery({
-    queryKey: ['pedidos', page, searchTerm],
-    queryFn: () => getPedidosResponse(page, searchTerm),
+    queryKey: ['pedidos', page, searchTerm, startDate, endDate],
+    queryFn: () => getPedidosResponse(page, searchTerm, startDate, endDate),
   });
 
   const pedidos = data?.data.data ?? [];
@@ -67,6 +70,12 @@ const PedidosTable = () => {
             </Button>
           )}
         </div>
+        <FiltersPedidosTable 
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+        />
       </div>
 
       <Table>
@@ -109,11 +118,6 @@ const PedidosTable = () => {
               <TableCell>
                 {pedido.metodoPago}
               </TableCell>
-
-              {/* <TableCell>
-                {pedido.createdBy.name}{' '}
-                {pedido.createdBy.lastName}
-              </TableCell> */}
 
               <TableCell>
                 {truncarTexto(pedido.descripcion || '-', 30)}

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import PedidosTable from '../components/PedidosTable';
+import PedidosTable from '../components/pedidosTable/PedidosTable';
 import { Link } from 'react-router';
 
 const PedidosPage = () => {

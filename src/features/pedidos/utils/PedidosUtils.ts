@@ -10,11 +10,8 @@ const calTotales = (pedido?: Pedido, pedidoForm?: PedidoFormData): PedidosCalTot
         ? pedidoForm.menuItems.map(i => ({ precio: i.price, cantidad: i.cantidad }))
         : pedido!.items.map(i => ({ precio: i.precio / i.cantidad, cantidad: i.cantidad }));
 
-    console.log(items)
 
     const total = items.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
-
-    console.log(total)
 
     const subTotal = total * 0.79;
     const recargo = total * (source.recargo ?? 0) / 100;

@@ -17,7 +17,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { validatePedidosFormData } from '../validators/PedidosFormValidator';
-import { Edit } from 'lucide-react';
+import { Edit, Pencil } from 'lucide-react';
 import PedidoResumen from './PedidoResumen';
 import { calTotales } from '../utils/PedidosUtils';
 
@@ -42,7 +42,7 @@ const PedidosCreateDialog = ({ formDataEdit, idEdit, open, setOpen }: PedidosCre
   const queryClient = useQueryClient();
 
   const handleTotales = calTotales(null, formData);
-  
+
   const handleDeleteItem = (id: number) => {
     const newMenuItems = formData.menuItems.filter((item) => item.id !== id);
     setFormData({ ...formData, menuItems: newMenuItems });
@@ -113,10 +113,10 @@ const PedidosCreateDialog = ({ formDataEdit, idEdit, open, setOpen }: PedidosCre
     }
 
     if (!formDataEdit) {
-      console.log('create', formDataEdit)
+      // console.log('create', formDataEdit)
       mutationCreate.mutate(parseformData);
     } else {
-      console.log('edit', formDataEdit)
+      // console.log('edit', formDataEdit)
       mutationUpdate.mutate({ id: idEdit, data: parseformData });
     }
 
@@ -128,9 +128,15 @@ const PedidosCreateDialog = ({ formDataEdit, idEdit, open, setOpen }: PedidosCre
     <Dialog open={open} onOpenChange={setOpen}>
 
       <DialogTrigger render={<Button
+        variant={formDataEdit ? 'secondary' : 'default'} 
         size={formDataEdit ? 'icon' : 'default'}
+        className={
+          formDataEdit
+            ? 'h-8 w-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 [&_svg]:h-3.5 [&_svg]:w-3.5'
+            : ''
+        }
       />}>
-        {formDataEdit ? <Edit /> : 'Nuevo Pedido'}
+        {formDataEdit ? <Pencil /> : 'Nuevo Pedido'}
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[850px] sm:max-h-[600px] overflow-y-auto ">

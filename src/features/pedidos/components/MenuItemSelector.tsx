@@ -97,7 +97,7 @@ const MenuItemSelector = ({
                 </div>
                 <Button
                   size='sm'
-                  variant={selectedItems ? "secondary" : "outline"}
+                  variant={isSelected ? "secondary" : "outline"}
                   onClick={() => handleToggle(menuItem)}
                 >
                   {isSelected ? (
